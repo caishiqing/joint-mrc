@@ -60,19 +60,19 @@ keras==2.2.4
 </p>
 
 我们通过构建一个有向无环图来完成整个规划，如上图所示，上层是对篇章使用标点符号分割后的句子序列，我们规定最长子段落是满足最大长度限制条件下的最长连续句子子序列，即再添加下一句就会超出最大长度，如图中所示的Para1{Sent1, Sent2, Sent3}，我们以所有合法的子段落作为节点，按顺序将具有交叉或相连的子段落之间用有向边连接，边的权重为两个段落之间的交叉度
-$$
-w_{ij}=c_{ij}^2
-$$
+
+<p align = 'center'><a href="https://www.codecogs.com/eqnedit.php?latex=w_{ij}=c_{ij}^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?w_{ij}=c_{ij}^2" title="w_{ij}=c_{ij}^2" /></a></p>
+
 其中c_ij为两个段落之间的交叉文本长度，我们需要规划一条连接首尾节点的路径以最小化目标
-$$
-F_{1->M}=arg\,\min_{S} \sum_{(i->j)\subset S}w_{ij}\quad=\quad arg\,\min_{S}\sum_{(i->j)\subset S}||c_{ij}||_2^2 ,\quad\forall (i->j)\subset S
-$$
+
+<p align = 'center'><a href="https://www.codecogs.com/eqnedit.php?latex=w_{ij}=c_{ij}^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_{1->M}=arg\,\min_{S} \sum_{(i->j)\subset S}w_{ij}=\quad arg\,\min_{S}\sum_{(i->j)\subset S}||c_{ij}||_2^2 ,\forall (i->j)\subset S" /></a></p>
+
 之所以用二范式的度量方式，是因为路径总权重的二范式既能度量总体冗余度的大小，又能控制不同段落之间的交叉均衡（降低丢失答案信息的风险）。
 
 我们可以递归地定义子问题的解
-$$
-F_{i->j}=F_{i->j-1}+w_{j-1,j}
-$$
+
+<p align = 'center'><a href="https://www.codecogs.com/eqnedit.php?latex=w_{ij}=c_{ij}^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_{i->j}=F_{i->j-1}+w_{j-1,j}" /></a></p>
+
 然后使用动态规划求解原问题的解。分段算法的代码定义在utils.data_utils.split_text中，有兴趣的可以仔细研读。以下是分段算法的意识示例
 
 ```python
@@ -143,15 +143,15 @@ sub_texts = [
 ### Ranking
 
 到此为止，我们便完成了模型的所有训练工作，通过推断我们可以得到每个问题在相关的所有段落上的检索分数（阳性概率）与答案分数（边界概率），实际上模型输出的是start和end两个概率分布，我们规定答案分数由下式融合而得
-$$
-P_{ans}=exp \left(\frac{w_slogP_s+w_elogP_e}{w_s+w_e}\right)
-$$
+
+<p align = 'center'><a href="https://www.codecogs.com/eqnedit.php?latex=w_{ij}=c_{ij}^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?P_{ans}=exp \left(\frac{w_slogP_s+w_elogP_e}{w_s+w_e}\right)" /></a></p>
+
 这样的融合方式比直接求平均最终分数要高出0.3个百分点左右，可能的原因是这种形式提高了结果的置信度，因为log函数对越小的值越敏感，换句话说如果其中有一项概率比较低，会拉低总体分数。w_s和w_e分别代表start和end的权重比例，我们默认为1:1.
 
 我们现在有了检索和阅读两个分数，可以综合这两个分数对答案排序
-$$
-P=exp \left(\frac{w_{nsp}logP_{nsp}+w_{ans}logP_{ans}}{w_{nsp}+w_{ans}}\right)
-$$
+
+<p align = 'center'><a href="https://www.codecogs.com/eqnedit.php?latex=w_{ij}=c_{ij}^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?P=exp \left(\frac{w_{nsp}logP_{nsp}+w_{ans}logP_{ans}}{w_{nsp}+w_{ans}}\right)" /></a></p>
+
 其中w_nsp和w_ans是检索和阅读的分数权重，这是一对超参数（config.fuse_weights），并且当检索范围特别大时结果对这个超参数比较敏感，需要将nsp的权重比例调得很高，比赛中笔者使用的比例为 [0.98, 0.02]，之所以保留ans一部分权重是因为如果全部使用检索分数结果会有所下降，笔者分析可能是有少部分答案特别模糊，检索分数很接近，需要使用阅读分数来消歧。当篇章长度较小、负样本很少时影响并不大，甚至可以直接用阅读分数排序（[0, 1]）。
 
 最终我们会对问题对应的所有篇章所有段落中的答案排序，如果有多篇章一定要设置q_id来关联。
