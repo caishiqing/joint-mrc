@@ -18,4 +18,4 @@
 }
 ```
 
-其中"answer_end"和"q_id"为选填字段，"answer_end"可以没有或者为空，但"answer_start"为必填字段；对于训练集或者单文档问题"q_id"可以没有，但是对于多文档测试集需要使用"q_id"关联文档段落与排序。将数据集目录放入datasets目录即可。
+其中"answer_end"和"q_id"为选填字段，"answer_end"可以没有或者为None，但"answer_start"为必填字段；对于训练集或者单文档问题"q_id"可以没有，但是对于多文档测试集需要使用"q_id"关联文档段落与排序。如果"answer"字段为None，则表示本段落中无答案，即负样本。
