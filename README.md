@@ -65,7 +65,7 @@ keras==2.2.4
 
 其中c_ij为两个段落之间的交叉文本长度，我们需要规划一条连接首尾节点的路径以最小化目标
 
-<img src="http://latex.codecogs.com/gif.latex?F_{1->M}=arg\,\min_{S} \sum_{(i->j)\subset S}w_{ij}=\quad arg\,\min_{S}\sum_{(i->j)\subset S}||c_{ij}||_2^2 ,\forall (i->j)\subset S" /> 
+<p align = 'center'><img src="http://latex.codecogs.com/gif.latex?F_{1->M}=arg\,\min_{S} \sum_{(i->j)\subset S}w_{ij}=\quad arg\,\min_{S}\sum_{(i->j)\subset S}||c_{ij}||_2^2 ,\forall (i->j)\subset S" /></p> 
 
 <p align = 'center'><img src="https://latex.codecogs.com/gif.latex?F_{1->M}=arg\,\min_{S} \sum_{(i->j)\subset S}w_{ij}=\quad arg\,\min_{S}\sum_{(i->j)\subset S}||c_{ij}||_2^2 ,\forall (i->j)\subset S" /></p>
 
