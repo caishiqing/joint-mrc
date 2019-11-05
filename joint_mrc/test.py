@@ -1,5 +1,5 @@
 from utils.io_utils import load_mrc
-from model import MRC
+from model import JointMRC
 import tensorflow as tf
 from config import config
 
@@ -15,7 +15,7 @@ if __name__ == '__main__':
     except:
         retrieve = None
     # load model
-    mrc = MRC(config, model, retrieve)
+    mrc = JointMRC(config, model, retrieve)
     
     q = '姚明有多高？'
     c1 = '姚明身高226cm，被称为小巨人。'

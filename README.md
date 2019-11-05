@@ -73,7 +73,7 @@ keras==2.2.4
 
 <p align = 'center'><img src="https://latex.codecogs.com/gif.latex?F_{i->j}=F_{i->j-1}+w_{j-1,j}" /></p>
 
-然后使用动态规划求解原问题的解。分段算法的代码定义在utils.data_utils.split_text中，有兴趣的可以仔细研读。以下是分段算法的意识示例
+然后使用动态规划求解原问题的解。分段算法的代码定义在utils.data_utils.split_text中，有兴趣的可以仔细研读。以下是分段算法的示例
 
 ```python
 text = "今夕何夕兮，搴舟中流。今日何日兮，得与王子同舟。蒙羞被好兮，不訾诟耻。心几烦而不绝兮，得知王子。山有木兮木有枝，心悦君兮君不知。"
@@ -164,7 +164,7 @@ sub_texts = [
 
 ## DataSet
 
-每个数据集具有相同的格式，每个数据集包括train.json、valid.json、test.json三个文件，数据格式为json，每行一个样本，包含一段文本和对应的一个或多个问题，结构如下：
+每个数据集为一个独立的目录，具有相同的格式，包括train.json、valid.json、test.json三个文件，数据格式为json，每行一个样本，包含一段文本和对应的一个或多个问题，结构如下：
 
 ```
 {
@@ -182,18 +182,18 @@ sub_texts = [
 }
 ```
 
-所有数据集已经过清洗和统一格式，其中[WebQA](https://kexue.fm/archives/4338)来自百度，[Les](https://zhpmatrix.github.io/2018/08/27/machine-reading-comprehension/)来自于28所，[CMRC](https://worksheets.codalab.org/worksheets/0x92a80d2fab4b4f79a2b4064f7ddca9ce)来自科大讯飞。
-
-其中"answer_end"和"q_id"为选填字段，"answer_end"可以没有或者为空，但"answer_start"为必填字段；对于训练集或者单文档问题"q_id"可以没有，但是对于多文档测试集需要使用"q_id"关联文档段落与排序。
+其中"answer_end"和"q_id"为选填字段，"answer_end"可以没有或者为空，但"answer_start"为必填字段；对于训练集或者单文档问题"q_id"可以没有，但是对于多文档测试集需要使用"q_id"关联文档段落与排序。将数据集目录放入datasets目录即可。
 
 项目中的数据集需要组织成这种形式，为了避免预处理不必要的麻烦，笔者提供不同的已经处理好的数据集：
 
 * [CMRC](https://worksheets.codalab.org/worksheets/0x92a80d2fab4b4f79a2b4064f7ddca9ce)数据集，提取码：rkpp，[百度网盘](https://pan.baidu.com/s/1W7rSqeLuU2qc37ZdUTP3vw)
 * [WebQA](https://kexue.fm/archives/4338)数据集，提取码：t8ed，[百度网盘](https://pan.baidu.com/s/107DBjRQ-waa22JP2O0RyHA)
-* Les-simple（[莱斯杯](https://www.kesci.com/home/competition/5d142d8cbb14e6002c04e14a)单答案无推理）数据集，提取码：5tgv，[百度网盘](https://pan.baidu.com/s/1bWFRoV-Qg-fCKVx0STa0ug)
+* Les-simple（[莱斯杯](https://www.kesci.com/home/competition/5d142d8cbb14e6002c04e14a)单答案单篇章无推理）数据集，提取码：5tgv，[百度网盘](https://pan.baidu.com/s/1bWFRoV-Qg-fCKVx0STa0ug)
 * Les-totle（[莱斯杯](https://www.kesci.com/home/competition/5d142d8cbb14e6002c04e14a)完整数据集），提取码：irp0，[百度网盘](https://pan.baidu.com/s/1FK-LJYFugJ2IAJRaYKqh2Q)
 
- 
+ 将一个或多个数据集解压到datasets目录下，也可以将自己的数据集放置在这个目录下。其中CMRC和WebQA数据集的篇章较短，而Les-simple数据集的篇章较长，因为都是常规MRC任务的数据，可以混合训练以平衡正负样本，但是不建议和Les-totle混合，因为存在多答案和推理问题的样本，数据分布相差较大，效果会受到影响。
+
+
 
 ## Quick Start
 
@@ -260,7 +260,7 @@ python main.py --action eval --gpu 0 --file_path ./datasets/Les/test.json --mode
 
 ```python
 from utils.io_utils import load_mrc
-from model import MRC
+from model import JointMRC
 import tensorflow as tf
 from config import config
 
@@ -276,7 +276,7 @@ if __name__ == '__main__':
     except:
         retrieve = None
     # load model
-    mrc = MRC(config, model, retrieve)
+    mrc = JointMRC(config, model, retrieve)
     
     q = '姚明有多高？'
     c1 = '姚明身高226cm，被称为小巨人。'
