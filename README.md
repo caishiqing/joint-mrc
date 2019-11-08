@@ -186,7 +186,7 @@ sub_texts = [
 
 项目中的数据集需要组织成这种形式，为了避免预处理不必要的麻烦，笔者提供不同的已经处理好的数据集：
 
-* [CMRC](https://worksheets.codalab.org/worksheets/0x92a80d2fab4b4f79a2b4064f7ddca9ce)数据集，提取码：rkpp，[百度网盘](https://pan.baidu.com/s/1W7rSqeLuU2qc37ZdUTP3vw)
+* [CMRC-2018](https://worksheets.codalab.org/worksheets/0x92a80d2fab4b4f79a2b4064f7ddca9ce)数据集，提取码：zg3j，[百度网盘](https://pan.baidu.com/s/1wOMrHLw2ocN_SZtSulVsRg)
 * [WebQA](https://kexue.fm/archives/4338)数据集，提取码：t8ed，[百度网盘](https://pan.baidu.com/s/107DBjRQ-waa22JP2O0RyHA)
 * Les-simple（[莱斯杯](https://www.kesci.com/home/competition/5d142d8cbb14e6002c04e14a)单答案单篇章无推理）数据集，提取码：5tgv，[百度网盘](https://pan.baidu.com/s/1bWFRoV-Qg-fCKVx0STa0ug)
 * Les-totle（[莱斯杯](https://www.kesci.com/home/competition/5d142d8cbb14e6002c04e14a)完整数据集），提取码：irp0，[百度网盘](https://pan.baidu.com/s/1FK-LJYFugJ2IAJRaYKqh2Q)
